@@ -8,11 +8,12 @@ local wibox = require("wibox")
 local beautiful = require("beautiful")
 -- Notification library
 local naughty = require("naughty")
-local menubar = require("menubar")
+-- local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
 local declutter = require("add_tags")
 local utils = require("utils")
 local banners = require("banners")
+local layout_popup = require("layout_popup")
 -- Enable hotkeys help widget for VIM and other apps
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
@@ -142,12 +143,8 @@ else
     })
 end
 
-
-mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
-                                     menu = mymainmenu })
-
 -- Menubar configuration
-menubar.utils.terminal = terminal -- Set the terminal for applications that require it
+-- menubar.utils.terminal = terminal -- Set the terminal for applications that require it
 -- }}}
 
 -- Keyboard map indicator and switcher
@@ -237,19 +234,23 @@ awful.screen.connect_for_each_screen(function(s)
     --   text =  gfs.get_configuration_dir(),
     --   widget = wibox.widget.textbox
     -- }
+
+    -- TODO: no popup in 4.2
+    --layout_popup.layout_popup_init(s)
     -- Custom banners
     banners.init_tags_banner(s)
     banners.init_info_banner(s)
+    --banners.init_spotify_banner(s)
 end)
 
 -- }}}
 
 -- {{{ Mouse bindings
-root.buttons(gears.table.join(
-    awful.button({ }, 3, function () mymainmenu:toggle() end),
-    awful.button({ }, 4, awful.tag.viewnext),
-    awful.button({ }, 5, awful.tag.viewprev)
-))
+-- root.buttons(gears.table.join(
+--     awful.button({ }, 3, function () mymainmenu:toggle() end),
+--     awful.button({ }, 4, awful.tag.viewnext),
+--     awful.button({ }, 5, awful.tag.viewprev)
+-- ))
 -- }}}
 
 -- {{{ Key bindings
@@ -360,7 +361,11 @@ globalkeys = gears.table.join(
               end,
               {description = "lua execute prompt", group = "awesome"}),
     -- Menubar
-    awful.key({ modkey }, "p", function() menubar.show() end,
+--     awful.key({ modkey }, "p", function() menubar.show() end,
+--               {description = "show the menubar", group = "launcher"})
+-- )
+    -- JGmenu
+    awful.key({ modkey }, "d", function() awful.spawn("jgmenu_run") end,
               {description = "show the menubar", group = "launcher"})
 )
 

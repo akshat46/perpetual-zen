@@ -119,6 +119,12 @@ theme.wifi_icon_low = custom_themes_path.."widgets/icons/wifi-low.png"
 theme.wifi_icon_med = custom_themes_path.."widgets/icons/wifi-med.png"
 theme.wifi_icon_high = custom_themes_path.."widgets/icons/wifi-high.png"
 
+-- Media Icons
+theme.play_button_icon = custom_themes_path.."widgets/icons/play.png"
+theme.pause_button_icon = custom_themes_path.."widgets/icons/pause.png"
+theme.prev_button_icon = custom_themes_path.."widgets/icons/previous.png"
+theme.next_button_icon = custom_themes_path.."widgets/icons/next.png"
+
 
 -- Define the image to load
 -- theme.titlebar_close_button_normal = themes_path.."default/titlebar/close_normal.png"

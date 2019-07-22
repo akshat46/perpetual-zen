@@ -69,7 +69,7 @@ local function add_tags()
         end
     })
     awful.tag.add("5", {
-        layout      = awful.layout.suit.max,
+        layout      = awful.layout.suit.floating,
         screen      = s,
         icon = beautiful.tag_logo_spotify_outline,
         master_fill_policy = "master_width_factor",
@@ -98,7 +98,7 @@ local function add_tags()
         end
     })
     awful.tag.add("7", {
-        layout      = awful.layout.suit.tile,
+        layout      = awful.layout.suit.floating,
         screen      = s,
         icon = beautiful.tag_logo_circle_outline,
         master_fill_policy = "master_width_factor",
