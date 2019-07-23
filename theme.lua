@@ -31,7 +31,7 @@ theme.fg_minimize   = "#ffffff"
 theme.useless_gap   = dpi(0)
 theme.border_width  = dpi(0)
 theme.rounded_corners = false
-theme.border_radius = 5
+theme.border_radius = 8
 theme.border_normal = "#000000"
 theme.border_focus  = "#535d6c"
 theme.border_marked = "#91231c"
@@ -81,49 +81,56 @@ theme.menu_width  = dpi(100)
 --theme.bg_widget = "#cc0000"
 
 -- Tag Icons
-theme.tag_logo_terminal = custom_themes_path.."widgets/icons/terminal.png"
-theme.tag_logo_firefox = custom_themes_path.."widgets/icons/firefox.png"
-theme.tag_logo_code = custom_themes_path.."widgets/icons/code.png"
-theme.tag_logo_folder = custom_themes_path.."widgets/icons/folder.png"
-theme.tag_logo_spotify = custom_themes_path.."widgets/icons/spotify.png"
-theme.tag_logo_circle = custom_themes_path.."widgets/icons/circle.png"
+theme.tag_logo_terminal = custom_themes_path.."icons/terminal.png"
+theme.tag_logo_firefox = custom_themes_path.."icons/firefox.png"
+theme.tag_logo_code = custom_themes_path.."icons/code.png"
+theme.tag_logo_folder = custom_themes_path.."icons/folder.png"
+theme.tag_logo_spotify = custom_themes_path.."icons/spotify.png"
+theme.tag_logo_circle = custom_themes_path.."icons/circle.png"
 --
-theme.tag_logo_terminal_outline = custom_themes_path.."widgets/icons/terminal_outline.png"
-theme.tag_logo_firefox_outline = custom_themes_path.."widgets/icons/firefox_outline.png"
-theme.tag_logo_code_outline = custom_themes_path.."widgets/icons/code_outline.png"
-theme.tag_logo_folder_outline = custom_themes_path.."widgets/icons/folder_outline.png"
-theme.tag_logo_spotify_outline = custom_themes_path.."widgets/icons/spotify_outline.png"
-theme.tag_logo_circle_outline = custom_themes_path.."widgets/icons/circle_outline.png"
+theme.tag_logo_terminal_outline = custom_themes_path.."icons/terminal_outline.png"
+theme.tag_logo_firefox_outline = custom_themes_path.."icons/firefox_outline.png"
+theme.tag_logo_code_outline = custom_themes_path.."icons/code_outline.png"
+theme.tag_logo_folder_outline = custom_themes_path.."icons/folder_outline.png"
+theme.tag_logo_spotify_outline = custom_themes_path.."icons/spotify_outline.png"
+theme.tag_logo_circle_outline = custom_themes_path.."icons/circle_outline.png"
 
 -- Volume Icons
-theme.volume_icon_high = custom_themes_path.."widgets/icons/volume-high.png"
-theme.volume_icon_medium = custom_themes_path.."widgets/icons/volume-medium.png"
-theme.volume_icon_low = custom_themes_path.."widgets/icons/volume-low.png"
-theme.volume_icon_mute = custom_themes_path.."widgets/icons/volume-mute.png"
-theme.volume_icon_off = custom_themes_path.."widgets/icons/volume-off.png"
+theme.volume_icon_high = custom_themes_path.."icons/volume-high.png"
+theme.volume_icon_medium = custom_themes_path.."icons/volume-medium.png"
+theme.volume_icon_low = custom_themes_path.."icons/volume-low.png"
+theme.volume_icon_mute = custom_themes_path.."icons/volume-mute.png"
+theme.volume_icon_off = custom_themes_path.."icons/volume-off.png"
 
 -- Thermal icons
-theme.thermal_icon = custom_themes_path.."widgets/icons/thermometer.png"
-theme.thermal_icon_alert = custom_themes_path.."widgets/icons/thermometer_alert.png"
+theme.thermal_icon = custom_themes_path.."icons/thermometer.png"
+theme.thermal_icon_alert = custom_themes_path.."icons/thermometer_alert.png"
 
 -- Battery Icons
-theme.battery_icon_charging = custom_themes_path.."widgets/icons/battery-charging.png"
-theme.battery_icon_low = custom_themes_path.."widgets/icons/battery-low.png"
-theme.battery_icon_med = custom_themes_path.."widgets/icons/battery-med.png"
-theme.battery_icon_high = custom_themes_path.."widgets/icons/battery-high.png"
-theme.battery_icon_full = custom_themes_path.."widgets/icons/battery-full.png"
+theme.battery_icon_charging = custom_themes_path.."icons/battery-charging.png"
+theme.battery_icon_low = custom_themes_path.."icons/battery-low.png"
+theme.battery_icon_med = custom_themes_path.."icons/battery-med.png"
+theme.battery_icon_high = custom_themes_path.."icons/battery-high.png"
+theme.battery_icon_full = custom_themes_path.."icons/battery-full.png"
 
 -- WiFi Icons
-theme.wifi_icon_disconnected = custom_themes_path.."widgets/icons/wifi-disconnected.png"
-theme.wifi_icon_low = custom_themes_path.."widgets/icons/wifi-low.png"
-theme.wifi_icon_med = custom_themes_path.."widgets/icons/wifi-med.png"
-theme.wifi_icon_high = custom_themes_path.."widgets/icons/wifi-high.png"
+theme.wifi_icon_disconnected = custom_themes_path.."icons/wifi-disconnected.png"
+theme.wifi_icon_low = custom_themes_path.."icons/wifi-low.png"
+theme.wifi_icon_med = custom_themes_path.."icons/wifi-med.png"
+theme.wifi_icon_high = custom_themes_path.."icons/wifi-high.png"
 
 -- Media Icons
-theme.play_button_icon = custom_themes_path.."widgets/icons/play.png"
-theme.pause_button_icon = custom_themes_path.."widgets/icons/pause.png"
-theme.prev_button_icon = custom_themes_path.."widgets/icons/previous.png"
-theme.next_button_icon = custom_themes_path.."widgets/icons/next.png"
+theme.play_button_icon = custom_themes_path.."icons/play.png"
+theme.pause_button_icon = custom_themes_path.."icons/pause.png"
+theme.prev_button_icon = custom_themes_path.."icons/previous.png"
+theme.next_button_icon = custom_themes_path.."icons/next.png"
+-- spotify variants
+theme.spotify_play_button_icon = custom_themes_path.."spawtify/icons/play-spotify.png"
+theme.spotify_pause_button_icon = custom_themes_path.."spawtify/icons/pause-spotify.png"
+theme.spotify_prev_button_icon = custom_themes_path.."spawtify/icons/previous-spotify.png"
+theme.spotify_next_button_icon = custom_themes_path.."spawtify/icons/next-spotify.png"
+theme.spotify_icon = custom_themes_path.."spawtify/icons/spotify-spotify.png"
+theme.error_icon = custom_themes_path.."spawtify/icons/ghost.png"
 
 
 -- Define the image to load

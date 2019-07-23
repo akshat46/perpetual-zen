@@ -1,0 +1,3 @@
+[submodule "spawtify"]
+	path = spawtify
+	url = https://github.com/akshat46/spawtify.git

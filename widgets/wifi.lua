@@ -2,6 +2,7 @@ local awful = require("awful")
 local wibox = require("wibox")
 local watch = require("awful.widget.watch")
 local beautiful = require("beautiful")
+local naughty = require("naughty")
 
 local GET_NET_LVL = "awk 'NR==3 {printf \"%3.0f\" ,($3/70)*100}' /proc/net/wireless"
 

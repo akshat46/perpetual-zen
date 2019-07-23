@@ -9,59 +9,8 @@ local thermal_widget = require ("widgets/thermal")
 local battery_widget = require ("widgets/battery")
 local wifi_widget = require ("widgets/wifi")
 local naughty = require("naughty")
-local spotify_widget_elements = require("widgets/spotify")
 
 local banners = {}
-
---- tags banner
-banners.init_spotify_banner = function(s)
-    -- local button_size = 50
-    -- local toggle_button = wibox.widget{
-    --     image = beautiful.play_button_icon,
-    --     widget = wibox.widget.imagebox,
-    --     forced_height = button_size,
-    --     forced_width = button_size,
-    -- }
-    --
-    -- local prev_button = wibox.widget({
-    --     image = beautiful.prev_button_icon,
-    --     widget = wibox.widget.imagebox,
-    --     forced_height = button_size,
-    --     forced_width = button_size,
-    -- })
-
-    s.spotify_widget = ({
-        -- {
-        --     prev_button,
-        --     toggle_button,
-        --     --next_button,
-        --     layout = wibox.layout.fixed.horizontal,
-        -- },
-        -- halign = "center",
-        -- layout = wibox.container.place,
-        spotify_widget_elements.prev_button,
-        spotify_widget_elements.toggle_button,
-        -- --next_button,
-        layout = wibox.layout.fixed.horizontal,
-    })
-    s.spotifyBannerContainer = wibox{
-        screen = s,
-        visible = true,
-        width = 460,
-        height = 600,
-        bg = beautiful.bg_normal,
-        shape = utils.rrect(beautiful.round_radius),
-        ontop = true,
-    }
-
-    utils.relative_position(s.spotifyBannerContainer, "bottom", 225)
-    utils.relative_position(s.spotifyBannerContainer, "right", -20)
-
-    s.spotifyBannerContainer:setup{
-        layout =  wibox.layout.fixed.vertical,
-        s.spotify_widget,
-    }
-end
 
 --- tags banner
 banners.init_tags_banner = function(s)
@@ -76,7 +25,7 @@ banners.init_tags_banner = function(s)
         width = 460,
         height = 80,
         bg = beautiful.bg_normal,
-        shape = utils.rrect(beautiful.round_radius),
+        shape = utils.rrect(beautiful.border_radius),
         ontop = true,
     }
     s.tagsBannerContainer:setup{
@@ -108,7 +57,7 @@ banners.init_info_banner = function(s)
         width = 460,
         height = 300,
         bg = beautiful.bg_normal,
-        shape = utils.rrect(beautiful.round_radius),
+        shape = utils.rrect(beautiful.border_radius),
         ontop = true,
     }
     s.layoutBox = awful.widget.layoutbox(s)
@@ -148,7 +97,8 @@ banners.init_info_banner = function(s)
     battery_widget.text_widget.font = beautiful.fontname .. " Bold 9"
     wifi_widget.text_widget.font = beautiful.fontname .. " Bold 9"
 
-    s.infoBannerContainer:setup{ -- Time & date widget
+    s.infoBannerContainer:setup
+    { -- Time & date widget
         layout = wibox.layout.fixed.vertical,
         datetime,
         utils.pad_height(4),
@@ -195,13 +145,13 @@ banners.init_info_banner = function(s)
         --     layout = wibox.container.place,
         --     halign = true,
         -- },
-        {
-            layout = wibox.layout.manual,
-            cpu_widget,
-        },
+        -- {
+        --     layout = wibox.layout.manual,
+        --     cpu_widget,
+        -- },
     }
     utils.relative_position(s.infoBannerContainer, "bottom", 20)
-    utils.relative_position(s.infoBannerContainer, "right", -20)
+    utils.relative_position(s.infoBannerContainer, "right", -10)
 end
 
 banners.toggle_info_banner = function()
