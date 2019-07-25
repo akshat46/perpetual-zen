@@ -4,8 +4,9 @@
 
 local theme_assets = require("beautiful.theme_assets")
 local xresources = require("beautiful.xresources")
+local xrdb = xresources.get_current_theme()
 local dpi = xresources.apply_dpi
-
+local utils = require("utils")
 local gfs = require("gears.filesystem")
 local themes_path = gfs.get_themes_dir()
 local custom_themes_path = gfs.get_configuration_dir()
@@ -14,32 +15,44 @@ local theme = {}
 
 theme.font          = "Atlas Grotesk 11"
 theme.fontname      = "Atlas Grotesk"
-theme.titlefont     = "Atlas Grotesk Web"
+theme.titlefont     = "Atlas Grotesk Web Bold"
 theme.padding_font  = "hack 2"
 
-theme.bg_normal     = "#222222"
+theme.bg_normal     = xrdb.background
 theme.bg_focus      = "#535d6c"
-theme.bg_urgent     = "#ff0000"
+theme.bg_urgent     = xrdb.color9
 theme.bg_minimize   = "#444444"
 theme.bg_systray    = theme.bg_normal
 
-theme.fg_normal     = "#aaaaaa"
-theme.fg_focus      = "#ffffff"
-theme.fg_urgent     = "#ffffff"
+theme.fg_normal     = xrdb.foreground
+theme.fg_focus      = xrdb.color13
+theme.fg_urgent     = xrdb.color9
 theme.fg_minimize   = "#ffffff"
 
 theme.useless_gap   = dpi(0)
 theme.border_width  = dpi(0)
-theme.rounded_corners = false
+theme.rounded_corners = true
 theme.border_radius = 8
 theme.border_normal = "#000000"
 theme.border_focus  = "#535d6c"
 theme.border_marked = "#91231c"
 
+-- naughty
+theme.notification_font = theme.font
+theme.notification_bg = theme.bg_normal
+theme.notification_fg = theme.fg_normal
+theme.notification_border_color = theme.bg_normal
+theme.notification_border_width = 0
+theme.notification_shape = utils.rrect(theme.border_radius)
+theme.notification_size_small = { height = 100, width  = 340 }
+theme.notification_size_medium = { height = 120, width  = 400 }
+theme.notification_size_large = { height = 135, width  = 450 }
+
 -- There are other variable sets
 -- overriding the default one when
 -- defined, the sets are:
 -- taglist_[bg|fg]_[focus|urgent|occupied|empty|volatile]
+theme.taglist_bg_focus = theme.bg_normal
 -- tasklist_[bg|fg]_[focus|urgent]
 -- titlebar_[bg|fg]_[normal|focus]
 -- tooltip_[font|opacity|fg_color|bg_color|border_width|border_color]

@@ -40,10 +40,10 @@ naughty.config.presets.spotify = {
     end,
 
     -- Adjust the size of the notification
-    height = 60,
-    width  = 300,
+    height = 100,
+    width  = 340,
     -- Guessing the value, find a way to fit it to the proper size later
-    icon_size = 50
+    icon_size = 90
 }
 table.insert(naughty.dbus.config.mapping, {{appname = "Spotify"}, naughty.config.presets.spotify})
 
@@ -160,6 +160,9 @@ else
     })
 end
 
+collectgarbage("setpause", 100)
+collectgarbage("setstepmul", 400)
+
 -- Menubar configuration
 -- menubar.utils.terminal = terminal -- Set the terminal for applications that require it
 -- }}}
@@ -262,6 +265,7 @@ awful.screen.connect_for_each_screen(function(s)
         screen = s,
         artwork = true,
     })
+    spotify.toggle()
 end)
 
 -- }}}
@@ -556,6 +560,9 @@ awful.rules.rules = {
       properties = { screen = 1, tag = "4" } },
     { rule = { class = "Spotify" },
       properties = { screen = 1, tag = "5" } },
+    { rule = { class = "GLava" },
+      callback = function(c) spotify.setVisualizer(c) end
+      },
 }
 -- }}}
 

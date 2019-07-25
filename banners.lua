@@ -61,11 +61,11 @@ banners.init_info_banner = function(s)
         ontop = true,
     }
     s.layoutBox = awful.widget.layoutbox(s)
-    s.layoutBox.point = awful.placement.top_left
+    --s.layoutBox.point = awful.placement.top_left
     -- datetime
     local clock = wibox.widget({
         align = 'center',
-        font = beautiful.titlefont .. " Bold 36",
+        font = beautiful.titlefont .. " 36",
         widget = wibox.widget.textclock('%H:%M'),
     })
     local date = wibox.widget({
@@ -76,10 +76,15 @@ banners.init_info_banner = function(s)
     local datetime = wibox.widget({
         --utils.pad_height(4),
         {
-            layout = wibox.layout.manual,
-            forced_width = 30,
-            forced_height = 30,
+            -- layout = wibox.layout.manual,
+            forced_width = 40,
+            forced_height = 40,
             s.layoutBox,
+            left = 10,
+            top = 10,
+
+            bottom = 5,
+            layout = wibox.container.margin,
         },
         {
             widget = clock,
@@ -92,10 +97,10 @@ banners.init_info_banner = function(s)
     })
 
     cpu_widget.point = awful.placement.bottom_left
-    volume_widget.text_widget.font = beautiful.fontname .. " Bold 9"
-    thermal_widget.text_widget.font = beautiful.fontname .. " Bold 9"
-    battery_widget.text_widget.font = beautiful.fontname .. " Bold 9"
-    wifi_widget.text_widget.font = beautiful.fontname .. " Bold 9"
+    volume_widget.text_widget.font = beautiful.fontname .. " 9"
+    thermal_widget.text_widget.font = beautiful.fontname .. " 9"
+    battery_widget.text_widget.font = beautiful.fontname .. " 9"
+    wifi_widget.text_widget.font = beautiful.fontname .. " 9"
 
     s.infoBannerContainer:setup
     { -- Time & date widget
@@ -107,7 +112,7 @@ banners.init_info_banner = function(s)
                 volume_widget,
                 battery_widget,
                 spacing = 100,
-                forced_height = 50,
+                forced_height = 45,
                 forced_width = 300,
                 layout = wibox.layout.flex.horizontal,
             },
@@ -120,7 +125,7 @@ banners.init_info_banner = function(s)
                 thermal_widget,
                 wifi_widget,
                 spacing = 100,
-                forced_height = 50,
+                forced_height = 45,
                 forced_width = 300,
                 layout = wibox.layout.flex.horizontal,
             },

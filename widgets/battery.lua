@@ -2,6 +2,7 @@ local awful = require("awful")
 local wibox = require("wibox")
 local watch = require("awful.widget.watch")
 local beautiful = require("beautiful")
+local notify = require("naughty").notify
 
 local GET_BAT_CAP = 'bash -c "cat /sys/class/power_supply/BAT0/capacity"'
 local GET_BAT_CHR = 'bash -c "cat /sys/class/power_supply/ADP1/online"'
@@ -45,7 +46,16 @@ local update_graphic = function(widget,stdout, _, _, _)
   local cap = tonumber(stdout)
   local battery_icon
   if not charging then
-    if cap < 25 then battery_icon=beautiful.battery_icon_low
+    if cap < 25 then
+        battery_icon = beautiful.battery_icon_low
+        notify({
+          title = "Low Battery",
+          text = "bro charge your shit",
+          icon = beautiful.battery_icon_low,
+          icon_size = beautiful.notification_size_medium.height-10,
+          width = beautiful.notification_size_medium.width,
+          height = beautiful.notification_size_medium.height,
+        })
     elseif (cap < 60) then battery_icon=beautiful.battery_icon_med
     elseif (cap < 80) then battery_icon=beautiful.battery_icon_high
     elseif (cap <= 100) then battery_icon=beautiful.battery_icon_full
