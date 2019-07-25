@@ -74,6 +74,6 @@ volume_widget:connect_signal("button::press", function(_,_,_,button)
     end)
 end)
 
-watch(GET_VOLUME_CMD, 5, update_graphic, volume_widget)
+watch(GET_VOLUME_CMD, 3, update_graphic, volume_widget)
 
 return volume_widget

@@ -7,40 +7,20 @@ local popup_control = {}
 
 popup_control.layout_popup_init = function(s)
     s.layoutPopup = awful.popup {
-    widget = {
-        {
-            {
-                text   = 'foobar',
-                widget = wibox.widget.textbox
-            },
-            {
-                {
-                    text   = 'foobar',
-                    widget = wibox.widget.textbox
-                },
-                bg     = '#ff00ff',
-                clip   = true,
-                shape  = gears.shape.rounded_bar,
-                widget = wibox.widget.background
-            },
-            {
-                value         = 0.5,
-                forced_height = 30,
-                forced_width  = 100,
-                widget        = wibox.widget.progressbar
-            },
-            layout = wibox.layout.fixed.vertical,
+        widget = wibox.widget {
+            id = "icon",
+            image = beautiful.battery_icon_low,
+            resize = true,
+            widget = wibox.widget.imagebox,
+            forced_height = 40,
         },
-        margins = 10,
-        widget  = wibox.container.margin
-    },
-    border_color = '#00ff00',
-    border_width = 5,
-    placement    = awful.placement.top_left,
-    shape        = gears.shape.rounded_rect,
-    visible      = true,
+        border_color = '#777777',
+        border_width = 2,
+        ontop        = true,
+        placement    = awful.placement.centered,
+        shape        = gears.shape.rounded_rect
     }
-    --s.layoutPopup:setup{}
+    s.layoutPopup:setup{}
 end
 
 return popup_control

@@ -8,7 +8,8 @@ local volume_widget = require ("widgets/volume")
 local thermal_widget = require ("widgets/thermal")
 local battery_widget = require ("widgets/battery")
 local wifi_widget = require ("widgets/wifi")
-local naughty = require("naughty")
+local xresources = require("beautiful.xresources")
+local dpi = xresources.apply_dpi
 
 local banners = {}
 
@@ -22,8 +23,8 @@ banners.init_tags_banner = function(s)
         screen = s,
         x = -20,
         visible = true,
-        width = 460,
-        height = 80,
+        width = dpi(360), --460
+        height = dpi(70), --80
         bg = beautiful.bg_normal,
         shape = utils.rrect(beautiful.border_radius),
         ontop = true,
@@ -33,12 +34,12 @@ banners.init_tags_banner = function(s)
         layout =  wibox.container.place,
         {
             widget = s.tagsBanner,
-            forced_height = 40,
-            forced_width = 420,
+            forced_height = dpi(35),
+            forced_width = dpi(340),
             --layout = wibox.container.margin(_, _, _, 2)
         }
     }
-    utils.relative_position(s.tagsBannerContainer, "bottom", 20)
+    utils.relative_position(s.tagsBannerContainer, "bottom", dpi(12))
 end
 
 banners.toggle_tags_banner = function()
@@ -54,8 +55,8 @@ banners.init_info_banner = function(s)
     s.infoBannerContainer = wibox{
         screen = s,
         visible = true,
-        width = 460,
-        height = 300,
+        width = dpi(360),
+        height = dpi(230),
         bg = beautiful.bg_normal,
         shape = utils.rrect(beautiful.border_radius),
         ontop = true,
@@ -65,25 +66,21 @@ banners.init_info_banner = function(s)
     -- datetime
     local clock = wibox.widget({
         align = 'center',
-        font = beautiful.titlefont .. " 36",
+        font = beautiful.titlefont .." "..dpi(28),
         widget = wibox.widget.textclock('%H:%M'),
     })
     local date = wibox.widget({
         align = 'center',
-        font = beautiful.fontname .. " 9",
+        font = beautiful.fontname .. " "..dpi(7),
         widget = wibox.widget.textclock('%A, %B, %d')
     })
     local datetime = wibox.widget({
-        --utils.pad_height(4),
         {
-            -- layout = wibox.layout.manual,
-            forced_width = 40,
-            forced_height = 40,
+            forced_width = dpi(25),
+            forced_height = dpi(25),
             s.layoutBox,
             left = 10,
             top = 10,
-
-            bottom = 5,
             layout = wibox.container.margin,
         },
         {
@@ -96,37 +93,38 @@ banners.init_info_banner = function(s)
 
     })
 
-    cpu_widget.point = awful.placement.bottom_left
-    volume_widget.text_widget.font = beautiful.fontname .. " 9"
-    thermal_widget.text_widget.font = beautiful.fontname .. " 9"
-    battery_widget.text_widget.font = beautiful.fontname .. " 9"
-    wifi_widget.text_widget.font = beautiful.fontname .. " 9"
+    cpu_widget.setColor(beautiful.fg_normal)
+    cpu_widget.widget.point = awful.placement.bottom_left
+    volume_widget.text_widget.font = beautiful.fontname .. " "..dpi(7)
+    thermal_widget.text_widget.font = beautiful.fontname .. " "..dpi(7)
+    battery_widget.text_widget.font = beautiful.fontname .. " "..dpi(7)
+    wifi_widget.text_widget.font = beautiful.fontname .. " "..dpi(7)
 
     s.infoBannerContainer:setup
     { -- Time & date widget
         layout = wibox.layout.fixed.vertical,
         datetime,
-        utils.pad_height(4),
+        utils.pad_height(dpi(4)),
         {
             {
                 volume_widget,
                 battery_widget,
-                spacing = 100,
-                forced_height = 45,
-                forced_width = 300,
+                spacing = dpi(80),
+                forced_height = dpi(35),
+                forced_width = dpi(230),
                 layout = wibox.layout.flex.horizontal,
             },
             layout = wibox.container.place,
             halign = true,
         },
-        utils.pad_height(4),
+        utils.pad_height(dpi(4)),
         {
             {
                 thermal_widget,
                 wifi_widget,
-                spacing = 100,
-                forced_height = 45,
-                forced_width = 300,
+                spacing = dpi(80),
+                forced_height = dpi(40),
+                forced_width = dpi(230),
                 layout = wibox.layout.flex.horizontal,
             },
             layout = wibox.container.place,
@@ -152,10 +150,10 @@ banners.init_info_banner = function(s)
         -- },
         -- {
         --     layout = wibox.layout.manual,
-        --     cpu_widget,
+        --     cpu_widget.widget,
         -- },
     }
-    utils.relative_position(s.infoBannerContainer, "bottom", 20)
+    utils.relative_position(s.infoBannerContainer, "bottom", dpi(12))
     utils.relative_position(s.infoBannerContainer, "right", -10)
 end
 

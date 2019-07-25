@@ -14,6 +14,7 @@ local declutter = require("add_tags")
 local utils = require("utils")
 local banners = require("banners")
 local spotify = require("spawtify/spotify_widget")
+local quawke = require("widgets/quawke")
 local layout_popup = require("layout_popup")
 -- Enable hotkeys help widget for VIM and other apps
 -- when client with a matching name is opened:
@@ -77,7 +78,7 @@ beautiful.init("/home/akshat/.config/awesome/theme.lua")
 terminal = "urxvt"
 editor = os.getenv("EDITOR") or "editor"
 editor_cmd = terminal .. " -e " .. editor
-
+--quawke.init(terminal, terminal)
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
 -- If you do not like this or do not have such a key,
@@ -130,107 +131,13 @@ local function client_menu_toggle_fn()
         end
     end
 end
--- }}}
-
--- {{{ Menu
--- Create a launcher widget and a main menu
-myawesomemenu = {
-   { "hotkeys", function() return false, hotkeys_popup.show_help end},
-   { "manual", terminal .. " -e man awesome" },
-   { "edit config", editor_cmd .. " " .. awesome.conffile },
-   { "restart", awesome.restart },
-   { "quit", function() awesome.quit() end}
-}
-
-local menu_awesome = { "awesome", myawesomemenu, beautiful.awesome_icon }
-local menu_terminal = { "open terminal", terminal }
-
-if has_fdo then
-    mymainmenu = freedesktop.menu.build({
-        before = { menu_awesome },
-        after =  { menu_terminal }
-    })
-else
-    mymainmenu = awful.menu({
-        items = {
-                  menu_awesome,
-                  { "Debian", debian.menu.Debian_menu.Debian },
-                  menu_terminal,
-                }
-    })
-end
 
 collectgarbage("setpause", 100)
 collectgarbage("setstepmul", 400)
 
--- Menubar configuration
--- menubar.utils.terminal = terminal -- Set the terminal for applications that require it
--- }}}
-
 -- Keyboard map indicator and switcher
 mykeyboardlayout = awful.widget.keyboardlayout()
 
--- {{{ Wibar
--- Create a textclock widget
-mytextclock = wibox.widget.textclock()
-
--- Create a wibox for each screen and add it
-local taglist_buttons = gears.table.join(
-                    awful.button({ }, 1, function(t) t:view_only() end),
-                    awful.button({ modkey }, 1, function(t)
-                                              if client.focus then
-                                                  client.focus:move_to_tag(t)
-                                              end
-                                          end),
-                    awful.button({ }, 3, awful.tag.viewtoggle),
-                    awful.button({ modkey }, 3, function(t)
-                                              if client.focus then
-                                                  client.focus:toggle_tag(t)
-                                              end
-                                          end),
-                    awful.button({ }, 4, function(t) awful.tag.viewnext(t.screen) end),
-                    awful.button({ }, 5, function(t) awful.tag.viewprev(t.screen) end)
-                )
-
-local tasklist_buttons = gears.table.join(
-                     awful.button({ }, 1, function (c)
-                                              if c == client.focus then
-                                                  c.minimized = true
-                                              else
-                                                  -- Without this, the following
-                                                  -- :isvisible() makes no sense
-                                                  c.minimized = false
-                                                  if not c:isvisible() and c.first_tag then
-                                                      c.first_tag:view_only()
-                                                  end
-                                                  -- This will also un-minimize
-                                                  -- the client, if needed
-                                                  client.focus = c
-                                                  c:raise()
-                                              end
-                                          end),
-                     awful.button({ }, 3, client_menu_toggle_fn()),
-                     awful.button({ }, 4, function ()
-                                              awful.client.focus.byidx(1)
-                                          end),
-                     awful.button({ }, 5, function ()
-                                              awful.client.focus.byidx(-1)
-                                          end))
-
-local function set_wallpaper(s)
-    -- Wallpaper
-    if beautiful.wallpaper then
-        local wallpaper = beautiful.wallpaper
-        -- If wallpaper is a function, call it with the screen
-        if type(wallpaper) == "function" then
-            wallpaper = wallpaper(s)
-        end
-        gears.wallpaper.maximized(wallpaper, s, true)
-    end
-end
-
--- -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
--- screen.connect_signal("property::geometry", set_wallpaper)
 
 local gfs = require("gears.filesystem")
 awful.screen.connect_for_each_screen(function(s)
@@ -241,19 +148,6 @@ awful.screen.connect_for_each_screen(function(s)
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
-
-    -- local test = wibox {
-    --   visible = true,
-    --   width = 500,
-    --   height = 100,
-    --   bg = "#181818",
-    --   below = true,
-    -- }
-    --
-    -- test:setup {
-    --   text =  gfs.get_configuration_dir(),
-    --   widget = wibox.widget.textbox
-    -- }
 
     -- TODO: no popup in 4.2
     --layout_popup.layout_popup_init(s)
@@ -267,16 +161,6 @@ awful.screen.connect_for_each_screen(function(s)
     })
     spotify.toggle()
 end)
-
--- }}}
-
--- {{{ Mouse bindings
--- root.buttons(gears.table.join(
---     awful.button({ }, 3, function () mymainmenu:toggle() end),
---     awful.button({ }, 4, awful.tag.viewnext),
---     awful.button({ }, 5, awful.tag.viewprev)
--- ))
--- }}}
 
 -- {{{ Key bindings
 globalkeys = gears.table.join(
@@ -301,18 +185,16 @@ globalkeys = gears.table.join(
         end,
         {description = "focus previous by index", group = "client"}
     ),
-    awful.key({ modkey,           }, "w", function () mymainmenu:show() end,
-              {description = "show main menu", group = "awesome"}),
 
     -- toggle custom banners
     awful.key({ modkey,           }, "z", banners.toggle_tags_banner,
         {description = "toggle taglist banner", group = "awesome"}),
     awful.key({ modkey,           }, ".", banners.toggle_info_banner,
-        {description = "toggle taglist banner", group = "awesome"}),
+        {description = "toggle info banner", group = "awesome"}),
 
     -- toggle spotify widget
     awful.key({ modkey, "Shift"   }, "s",      spotify.toggle,
-        {description="show help", group="awesome"}),
+        {description="toggle spawtify", group="awesome"}),
 
     -- Layout manipulation
     awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end,
@@ -389,13 +271,32 @@ globalkeys = gears.table.join(
                   }
               end,
               {description = "lua execute prompt", group = "awesome"}),
-    -- Menubar
---     awful.key({ modkey }, "p", function() menubar.show() end,
---               {description = "show the menubar", group = "launcher"})
--- )
+
     -- JGmenu
     awful.key({ modkey }, "d", function() awful.spawn("jgmenu_run") end,
-              {description = "show the menubar", group = "launcher"})
+              {description = "show the menubar", group = "launcher"}),
+
+    --flameshot
+    awful.key({ modkey, "Shift" }, "d", function() awful.spawn("flameshot gui") end,
+            {description = "show the menubar", group = "launcher"}),
+    awful.key({ modkey, "Control" }, "d", function() awful.spawn("flameshot screen") end,
+            {description = "show the menubar", group = "launcher"}),
+
+    --quawke
+    awful.key({ modkey }, "`", function() quawke.toggle(client) end,
+        {description = "show the menubar", group = "launcher"}),
+    -- media control volume
+    awful.key({}, "XF86AudioRaiseVolume", function() awful.spawn("pactl set-sink-volume 0 +5%") end),
+    awful.key({}, "XF86AudioLowerVolume", function() awful.spawn("pactl set-sink-volume 0 -5%") end),
+    awful.key({}, "XF86AudioMute", function() awful.spawn("pactl set-sink-mute 0 toggle") end),
+
+    -- media control playpause (spotify)
+    awful.key({ }, "XF86AudioPlay", function () awful.spawn("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause") end),
+
+    -- brightness controls
+    -- xbacklight wont work. for now changing brightness with my own script
+    awful.key({ }, "XF86MonBrightnessDown", function () awful.spawn("sudo br down") end),
+    awful.key({ }, "XF86MonBrightnessUp", function () awful.spawn("sudo br up") end)
 )
 
 clientkeys = gears.table.join(

@@ -52,9 +52,9 @@ local update_graphic = function(widget,stdout, _, _, _)
           title = "Low Battery",
           text = "bro charge your shit",
           icon = beautiful.battery_icon_low,
-          icon_size = beautiful.notification_size_medium.height-10,
-          width = beautiful.notification_size_medium.width,
-          height = beautiful.notification_size_medium.height,
+          icon_size = beautiful.notification_size_small.height-10,
+          width = beautiful.notification_size_small.width,
+          height = beautiful.notification_size_small.height,
         })
     elseif (cap < 60) then battery_icon=beautiful.battery_icon_med
     elseif (cap < 80) then battery_icon=beautiful.battery_icon_high

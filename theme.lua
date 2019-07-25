@@ -13,7 +13,7 @@ local custom_themes_path = gfs.get_configuration_dir()
 
 local theme = {}
 
-theme.font          = "Atlas Grotesk 11"
+theme.font          = "Atlas Grotesk "..dpi(8)
 theme.fontname      = "Atlas Grotesk"
 theme.titlefont     = "Atlas Grotesk Web Bold"
 theme.padding_font  = "hack 2"

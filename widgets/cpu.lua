@@ -2,20 +2,24 @@
 
 local watch = require("awful.widget.watch")
 local wibox = require("wibox")
+local xresources = require("beautiful.xresources")
+local dpi = xresources.apply_dpi
+local color
+local cpu_widget = {}
 
 local cpugraph_widget = wibox.widget {
     max_value = 150,
     background_color = "#00000000",
-    forced_width = 460,
-    height = 40,
+    forced_width = dpi(360),
+    height = dpi(30),
     step_width = 4,
-    step_spacing = 2,
+    step_spacing = 0,
     widget = wibox.widget.graph,
-    color = "linear:0,0:0,22:0,#FF0000:0.3,#FFFF00:0.5,#74aeab"
+    color = "linear:0,0:0,22:0,#FF0000:0.3,#FFFF00:0.5,#FFFFFF"
 }
 
 --- By default graph widget goes from left to right, so we mirror it and push up a bit
-local cpu_widget = wibox.container.margin(wibox.container.mirror(cpugraph_widget, { horizontal = true }), 0, 0, 0, 2)
+cpu_widget.widget = wibox.container.margin(wibox.container.mirror(cpugraph_widget, { horizontal = true }), 0, 0, 0, 2)
 
 local total_prev = 0
 local idle_prev = 0
@@ -38,5 +42,9 @@ watch([[bash -c "cat /proc/stat | grep '^cpu '"]], 1,
     end,
     cpugraph_widget
 )
+
+cpu_widget.setColor = function(c)
+    color = c
+end
 
 return cpu_widget
