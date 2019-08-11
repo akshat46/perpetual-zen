@@ -15,7 +15,11 @@ local utils = require("utils")
 local banners = require("banners")
 local spotify = require("spawtify/spotify_widget")
 local quawke = require("widgets/quawke")
+local top = require("widgets/top")
+-- local exit_screen = require("widgets.exit_screen")
 local layout_popup = require("layout_popup")
+local xresources = require("beautiful.xresources")
+local dpi = xresources.apply_dpi
 -- Enable hotkeys help widget for VIM and other apps
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
@@ -78,7 +82,8 @@ beautiful.init("/home/akshat/.config/awesome/theme.lua")
 terminal = "urxvt"
 editor = os.getenv("EDITOR") or "editor"
 editor_cmd = terminal .. " -e " .. editor
---quawke.init(terminal, terminal)
+quawke.init(terminal, terminal)
+top.init(terminal)
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
 -- If you do not like this or do not have such a key,
@@ -117,6 +122,89 @@ if beautiful.rounded_corners then
     end
   end)
 end
+
+local ll = awful.widget.layoutlist {
+    source      = awful.widget.layoutlist.source.default_layouts, --DOC_HIDE
+    spacing = dpi(24),
+    base_layout = wibox.widget {
+        spacing         = dpi(24),
+        forced_num_cols = 4,
+        layout          = wibox.layout.grid.vertical,
+    },
+    widget_template = {
+        {
+            {
+                id            = 'icon_role',
+                forced_height = dpi(68),
+                forced_width  = dpi(68),
+                widget        = wibox.widget.imagebox,
+            },
+            margins = dpi(24),
+            widget  = wibox.container.margin,
+        },
+        id              = 'background_role',
+        forced_width    = dpi(68),
+        forced_height   = dpi(68),
+        shape           = gears.shape.rounded_rect,
+        widget          = wibox.container.background,
+    },
+}
+
+local layout_popup = awful.popup {
+    widget = wibox.widget {
+        ll,
+        margins = dpi(24),
+        widget  = wibox.container.margin,
+    },
+    border_color = beautiful.border_color,
+    border_width = beautiful.border_width,
+    placement    = awful.placement.centered,
+    shape = utils.rrect(beautiful.border_radius),
+    ontop        = true,
+    visible      = false,
+    bg           = beautiful.bg_normal,
+}
+
+--DOC_NEWLINE
+
+-- Make sure you remove the default `Mod4+Space` and `Mod4+Shift+Space`
+-- keybindings before adding this.
+
+function gears.table.iterate_value(t, value, step_size, filter, start_at)
+    local k = gears.table.hasitem(t, value, true, start_at)
+    if not k then return end
+
+    step_size = step_size or 1
+    local new_key = gears.math.cycle(#t, k + step_size)
+
+    if filter and not filter(t[new_key]) then
+        for i=1, #t do
+            local k2 = gears.math.cycle(#t, new_key + i)
+            if filter(t[k2]) then
+                return t[k2], k2
+            end
+        end
+        return
+    end
+
+    return t[new_key], new_key
+end
+
+awful.keygrabber {
+    start_callback = function() layout_popup.visible = true  end,
+    stop_callback  = function() layout_popup.visible = false end,
+    export_keybindings = true,
+    stop_event = "release",
+    stop_key = {"Escape", "Super_L", "Super_R", "Mod4"},
+    keybindings = {
+        {{ modkey          } , " " , function()
+             awful.layout.set(gears.table.iterate_value(ll.layouts, ll.current_layout, 1), nil)
+        end},
+        {{ modkey, "Shift" } , " " , function()
+             awful.layout.set(gears.table.iterate_value(ll.layouts, ll.current_layout, -1), nil)
+        end},
+    }
+}
 
 -- {{{ Helper functions
 local function client_menu_toggle_fn()
@@ -241,10 +329,10 @@ globalkeys = gears.table.join(
               {description = "increase the number of columns", group = "layout"}),
     awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1, nil, true)    end,
               {description = "decrease the number of columns", group = "layout"}),
-    awful.key({ modkey,           }, "space", function () awful.layout.inc( 1)                end,
-              {description = "select next", group = "layout"}),
-    awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(-1)                end,
-              {description = "select previous", group = "layout"}),
+    -- awful.key({ modkey,           }, "space", function () awful.layout.inc( 1)                end,
+    --           {description = "select next", group = "layout"}),
+    -- awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(-1)                end,
+    --           {description = "select previous", group = "layout"}),
 
     awful.key({ modkey, "Control" }, "n",
               function ()
@@ -257,9 +345,9 @@ globalkeys = gears.table.join(
               end,
               {description = "restore minimized", group = "client"}),
 
-    -- Prompt
-    awful.key({ modkey },            "r",     function () awful.screen.focused().mypromptbox:run() end,
-              {description = "run prompt", group = "launcher"}),
+    -- -- Prompt
+    -- awful.key({ modkey },            "r",     function () awful.screen.focused().mypromptbox:run() end,
+    --           {description = "run prompt", group = "launcher"}),
 
     awful.key({ modkey }, "x",
               function ()
@@ -278,13 +366,21 @@ globalkeys = gears.table.join(
 
     --flameshot
     awful.key({ modkey, "Shift" }, "d", function() awful.spawn("flameshot gui") end,
-            {description = "show the menubar", group = "launcher"}),
-    awful.key({ modkey, "Control" }, "d", function() awful.spawn("flameshot screen") end,
-            {description = "show the menubar", group = "launcher"}),
+        {description = "flameshot: initialize", group = "launcher"}),
 
+    --Emacs
+    awful.key({ modkey, }, "e", function() awful.spawn("emacs") end,
+        {description = "Emacs", group = "launcher"}),
+
+    --Firefox
+    awful.key({ modkey, "Shift" }, "f", function() awful.spawn("firefox") end,
+            {description = "Firefox", group = "launcher"}),
     --quawke
     awful.key({ modkey }, "`", function() quawke.toggle(client) end,
-        {description = "show the menubar", group = "launcher"}),
+        {description = "toggle quawke", group = "launcher"}),
+    --top
+    awful.key({ modkey, "Shift" }, "t", function() top.toggle(client) end,
+        {description = "show go top", group = "launcher"}),
     -- media control volume
     awful.key({}, "XF86AudioRaiseVolume", function() awful.spawn("pactl set-sink-volume 0 +5%") end),
     awful.key({}, "XF86AudioLowerVolume", function() awful.spawn("pactl set-sink-volume 0 -5%") end),

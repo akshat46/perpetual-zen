@@ -10,8 +10,11 @@ local battery_widget = require ("widgets/battery")
 local wifi_widget = require ("widgets/wifi")
 local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
+local naughty = require("naughty")
 
 local banners = {}
+collectgarbage("setpause", 100)
+collectgarbage("setstepmul", 400)
 
 --- tags banner
 banners.init_tags_banner = function(s)
@@ -95,10 +98,10 @@ banners.init_info_banner = function(s)
 
     cpu_widget.setColor(beautiful.fg_normal)
     cpu_widget.widget.point = awful.placement.bottom_left
-    volume_widget.text_widget.font = beautiful.fontname .. " "..dpi(7)
-    thermal_widget.text_widget.font = beautiful.fontname .. " "..dpi(7)
-    battery_widget.text_widget.font = beautiful.fontname .. " "..dpi(7)
-    wifi_widget.text_widget.font = beautiful.fontname .. " "..dpi(7)
+    volume_widget.widget.text_widget.font = beautiful.fontname .. " "..dpi(7)
+    thermal_widget.widget.text_widget.font = beautiful.fontname .. " "..dpi(7)
+    battery_widget.widget.text_widget.font = beautiful.fontname .. " "..dpi(7)
+    wifi_widget.widget.text_widget.font = beautiful.fontname .. " "..dpi(7)
 
     s.infoBannerContainer:setup
     { -- Time & date widget
@@ -107,8 +110,8 @@ banners.init_info_banner = function(s)
         utils.pad_height(dpi(4)),
         {
             {
-                volume_widget,
-                battery_widget,
+                volume_widget.widget,
+                battery_widget.widget,
                 spacing = dpi(80),
                 forced_height = dpi(35),
                 forced_width = dpi(230),
@@ -120,10 +123,10 @@ banners.init_info_banner = function(s)
         utils.pad_height(dpi(4)),
         {
             {
-                thermal_widget,
-                wifi_widget,
+                thermal_widget.widget,
+                wifi_widget.widget,
                 spacing = dpi(80),
-                forced_height = dpi(40),
+                forced_height = dpi(35),
                 forced_width = dpi(230),
                 layout = wibox.layout.flex.horizontal,
             },
@@ -133,10 +136,10 @@ banners.init_info_banner = function(s)
         -- [[same widgets in grid layout. couldn't get vertical spacing to work]]
         -- {
         --     {
-        --         volume_widget,
-        --         battery_widget,
-        --         thermal_widget,
-        --         wifi_widget,
+        --         volume_widget.widget,
+        --         battery_widget.widget,
+        --         thermal_widget.widget,
+        --         wifi_widget.widget,
         --         spacing = 25,
         --         vertical_spacing = 40,
         --         forced_num_cols = 2,
@@ -155,14 +158,20 @@ banners.init_info_banner = function(s)
     }
     utils.relative_position(s.infoBannerContainer, "bottom", dpi(12))
     utils.relative_position(s.infoBannerContainer, "right", -10)
+    collectgarbage()
 end
 
 banners.toggle_info_banner = function()
+    local visible = false
     for s in screen do
         if s.infoBannerContainer then
             s.infoBannerContainer.visible = not s.infoBannerContainer.visible
+            visible = s.infoBannerContainer.visible
         end
     end
+    battery_widget.toggle_checker(visible)
+    thermal_widget.toggle_checker(visible)
+    volume_widget.toggle_checker(visible)
 end
 
 local last_selected_tag
@@ -171,10 +180,14 @@ function handle_tag_icons(selected_tag)
     if last_selected_tag ~= nil then
         local clients = last_selected_tag:clients()
         if not next(clients) then
-            last_selected_tag.switch_icon(last_selected_tag,false)
+            -- tag is empty
+            last_selected_tag.switch_icon(last_selected_tag,false,false)
+        else
+            --tag has something
+            last_selected_tag.switch_icon(last_selected_tag,false, true)
         end
     end
-    selected_tag.switch_icon(selected_tag,true)
+    selected_tag.switch_icon(selected_tag,true, false)
     last_selected_tag = selected_tag
 end
 

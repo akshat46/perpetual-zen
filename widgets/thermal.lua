@@ -2,10 +2,14 @@ local awful = require("awful")
 local wibox = require("wibox")
 local watch = require("awful.widget.watch")
 local beautiful = require("beautiful")
+local gears = require("gears")
+local naughty = require("naughty")
 
 local GET_TEMP_CMD = 'bash -c "cat /sys/class/hwmon/hwmon1/temp1_input"'
 
-local thermal_widget = wibox.widget({
+local thermal_widget = {}
+
+thermal_widget.widget = wibox.widget({
     {
         id = "icon_widget",
         {
@@ -29,7 +33,8 @@ local thermal_widget = wibox.widget({
         },
         layout = wibox.container.margin,
         set_text = function(self, text)
-            self.value.text = text
+          self.value.text = text
+          return text
         end,
         set_font = function(self, font)
             self.value.font = font
@@ -39,17 +44,42 @@ local thermal_widget = wibox.widget({
     force_height = 20,
 })
 
-local update_graphic = function(widget,stdout, _, _, _)
-  local temp = stdout
-  temp = temp/1000
-  widget.text_widget.text = math.floor(temp).."°C"
-  if temp > 60 then
-    widget.icon_widget.image = beautiful.thermal_icon_alert
+local init = true
+local update = function()
+    awful.spawn.easy_async_with_shell(command, function()
+      awful.spawn.easy_async_with_shell(GET_TEMP_CMD, function(out)
+        local temp = tonumber(out)
+        temp = temp/1000
+        thermal_widget.widget.text_widget.text = math.floor(temp).."°C"
+        if init then
+          thermal_widget.widget.icon_widget.image = beautiful.thermal_icon
+          init = false
+        end
+      end)
+    end)
+    collectgarbage()
+end
+local widget_update = gears.timer{
+    timeout = 30,
+    call_now = false,
+    callback = function()
+      update()
+    end
+}
+
+update()
+widget_update:start()
+
+collectgarbage("setpause", 100)
+collectgarbage("setstepmul", 400)
+
+thermal_widget.toggle_checker = function(visible)
+  if not visible then
+    widget_update:stop()
   else
-    widget.icon_widget.image = beautiful.thermal_icon
+    update()
+    widget_update:start()
   end
 end
-
-watch(GET_TEMP_CMD, 60, update_graphic, thermal_widget)
 
 return thermal_widget

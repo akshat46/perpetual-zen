@@ -5,13 +5,17 @@ local wibox = require("wibox")
 local watch = require("awful.widget.watch")
 local spawn = require("awful.spawn")
 local beautiful = require("beautiful")
+local gears = require("gears")
+local naughty = require("naughty")
 
 local GET_VOLUME_CMD = 'amixer -D pulse sget Master'
-local INC_VOLUME_CMD = 'amixer -D pulse sset Master 5%+'
-local DEC_VOLUME_CMD = 'amixer -D pulse sset Master 5%-'
-local TOG_VOLUME_CMD = 'amixer -D pulse sset Master toggle'
 
-local volume_widget = wibox.widget({
+local volume_widget = {}
+
+collectgarbage("setpause", 100)
+collectgarbage("setstepmul", 400)
+
+volume_widget.widget = wibox.widget({
     {
         id = "icon_widget",
         {
@@ -44,36 +48,44 @@ local volume_widget = wibox.widget({
     layout = wibox.layout.fixed.horizontal,
 })
 
-local update_graphic = function(widget, stdout, _, _, _)
-    local mute = string.match(stdout, "%[(o%D%D?)%]")
-    local volume = string.match(stdout, "(%d?%d?%d)%%")
-    volume = tonumber(string.format("% 3d", volume))
-    local volume_icon_name
-    if mute == "off" then volume_icon_name=beautiful.volume_icon_off
-    elseif (volume >= 0 and volume < 5) then volume_icon_name=beautiful.volume_icon_mute
-    elseif (volume < 20) then volume_icon_name=beautiful.volume_icon_low
-    elseif (volume < 50) then volume_icon_name=beautiful.volume_icon_medium
-    elseif (volume <= 100) then volume_icon_name=beautiful.volume_icon_high
-    end
-    widget.icon_widget.image = volume_icon_name
-    widget.text_widget.text = volume .."dB"
+local update = function()
+    awful.spawn.easy_async_with_shell(command, function()
+        awful.spawn.easy_async_with_shell(GET_VOLUME_CMD, function(out)
+            local mute = string.match(out, "%[(o%D%D?)%]")
+            local volume = string.match(out, "(%d?%d?%d)%%")
+            volume = tonumber(string.format("% 3d", volume))
+            local volume_icon_name
+            if mute == "off" then volume_icon_name=beautiful.volume_icon_off
+            elseif (volume >= 0 and volume < 5) then volume_icon_name=beautiful.volume_icon_mute
+            elseif (volume < 20) then volume_icon_name=beautiful.volume_icon_low
+            elseif (volume < 50) then volume_icon_name=beautiful.volume_icon_medium
+            elseif (volume <= 100) then volume_icon_name=beautiful.volume_icon_high
+            end
+            volume_widget.widget.icon_widget.image = volume_icon_name
+            volume_widget.widget.text_widget.text = volume .."dB"
+            collectgarbage()
+        end)
+    end)
 end
 
---[[ allows control volume level by:
-- clicking on the widget to mute/unmute
-- scrolling when cursor is over the widget
-]]
-volume_widget:connect_signal("button::press", function(_,_,_,button)
-    if (button == 4)     then awful.spawn(INC_VOLUME_CMD, false)
-    elseif (button == 5) then awful.spawn(DEC_VOLUME_CMD, false)
-    elseif (button == 1) then awful.spawn(TOG_VOLUME_CMD, false)
+local widget_update = gears.timer{
+    timeout = 5,
+    call_now = false,
+    callback = function()
+        update()
     end
+}
 
-    spawn.easy_async(GET_VOLUME_CMD, function(stdout, stderr, exitreason, exitcode)
-        update_graphic(volume_widget, stdout, stderr, exitreason, exitcode)
-    end)
-end)
+update()
+widget_update:start()
 
-watch(GET_VOLUME_CMD, 3, update_graphic, volume_widget)
+volume_widget.toggle_checker = function(visible)
+  if not visible then
+    widget_update:stop()
+  else
+    update()
+    widget_update:start()
+  end
+end
 
 return volume_widget

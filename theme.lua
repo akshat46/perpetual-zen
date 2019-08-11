@@ -19,7 +19,7 @@ theme.titlefont     = "Atlas Grotesk Web Bold"
 theme.padding_font  = "hack 2"
 
 theme.bg_normal     = xrdb.background
-theme.bg_focus      = "#535d6c"
+theme.bg_focus      = xrdb.color10
 theme.bg_urgent     = xrdb.color9
 theme.bg_minimize   = "#444444"
 theme.bg_systray    = theme.bg_normal
@@ -107,6 +107,13 @@ theme.tag_logo_code_outline = custom_themes_path.."icons/code_outline.png"
 theme.tag_logo_folder_outline = custom_themes_path.."icons/folder_outline.png"
 theme.tag_logo_spotify_outline = custom_themes_path.."icons/spotify_outline.png"
 theme.tag_logo_circle_outline = custom_themes_path.."icons/circle_outline.png"
+--
+-- theme.tag_logo_terminal_unfocused = custom_themes_path.."icons/terminal_unfocused.png"
+-- theme.tag_logo_firefox_unfocused = custom_themes_path.."icons/firefox_unfocused.png"
+-- theme.tag_logo_code_unfocused = custom_themes_path.."icons/code_unfocused.png"
+-- theme.tag_logo_folder_unfocused = custom_themes_path.."icons/folder_unfocused.png"
+-- theme.tag_logo_spotify_unfocused = custom_themes_path.."icons/spotify_unfocused.png"
+-- theme.tag_logo_circle_unfocused = custom_themes_path.."icons/circle_unfocused.png"
 
 -- Volume Icons
 theme.volume_icon_high = custom_themes_path.."icons/volume-high.png"
@@ -144,6 +151,12 @@ theme.spotify_prev_button_icon = custom_themes_path.."spawtify/icons/previous-sp
 theme.spotify_next_button_icon = custom_themes_path.."spawtify/icons/next-spotify.png"
 theme.spotify_icon = custom_themes_path.."spawtify/icons/spotify-spotify.png"
 theme.error_icon = custom_themes_path.."spawtify/icons/ghost.png"
+
+-- exit icons
+theme.exit_poweroff = custom_themes_path.."icons/poweroff.png"
+theme.exit_restart = custom_themes_path.."icons/restart.png"
+theme.exit_lock = custom_themes_path.."icons/lock.png"
+theme.exit_logout = custom_themes_path.."icons/logout.png"
 
 
 -- Define the image to load

@@ -14,9 +14,12 @@ local function add_tags()
         gap_single_client = true,
         selected = true,
         gap = 15,
-        switch_icon = function(self, selected)
+        switch_icon = function(self, selected, full)
+            full = full or false
             if selected then
                 self.icon = beautiful.tag_logo_terminal
+            elseif not selected and full then
+                self.icon = beautiful.tag_logo_terminal_unfocused
             else
                 self.icon = beautiful.tag_logo_terminal_outline
             end
@@ -30,9 +33,12 @@ local function add_tags()
         master_fill_policy = "master_width_factor",
         gap_single_client = false,
         gap = 5,
-        switch_icon = function(self, selected)
+        switch_icon = function(self, selected, full)
+            full = full or false
             if selected then
                 self.icon = beautiful.tag_logo_firefox
+            elseif not selected and full then
+                self.icon = beautiful.tag_logo_firefox_unfocused
             else
                 self.icon = beautiful.tag_logo_firefox_outline
             end
@@ -45,9 +51,12 @@ local function add_tags()
         master_fill_policy = "master_width_factor",
         gap_single_client = false,
         gap = 5,
-        switch_icon = function(self, selected)
+        switch_icon = function(self, selected, full)
+            full = full or false
             if selected then
                 self.icon = beautiful.tag_logo_code
+            elseif not selected and full then
+                self.icon = beautiful.tag_logo_code_unfocused
             else
                 self.icon = beautiful.tag_logo_code_outline
             end
@@ -60,9 +69,12 @@ local function add_tags()
         master_fill_policy = "master_width_factor",
         gap_single_client = true,
         gap = 10,
-        switch_icon = function(self, selected)
+        switch_icon = function(self, selected, full)
+            full = full or false
             if selected then
                 self.icon = beautiful.tag_logo_folder
+            elseif not selected and full then
+                self.icon = beautiful.tag_logo_folder_unfocused
             else
                 self.icon = beautiful.tag_logo_folder_outline
             end
@@ -74,9 +86,12 @@ local function add_tags()
         icon = beautiful.tag_logo_spotify_outline,
         master_fill_policy = "master_width_factor",
         gap = 15,
-        switch_icon = function(self, selected)
+        switch_icon = function(self, selected, full)
+            full = full or false
             if selected then
                 self.icon = beautiful.tag_logo_spotify
+            elseif not selected and full then
+                self.icon = beautiful.tag_logo_spotify_unfocused
             else
                 self.icon = beautiful.tag_logo_spotify_outline
             end
@@ -89,9 +104,12 @@ local function add_tags()
         master_fill_policy = "master_width_factor",
         gap_single_client = true,
         gap = 10,
-        switch_icon = function(self, selected)
+        switch_icon = function(self, selected, full)
+            full = full or false
             if selected then
                 self.icon = beautiful.tag_logo_circle
+            elseif not selected and full then
+                self.icon = beautiful.tag_logo_circle_unfocused
             else
                 self.icon = beautiful.tag_logo_circle_outline
             end
@@ -104,9 +122,12 @@ local function add_tags()
         master_fill_policy = "master_width_factor",
         gap_single_client = true,
         gap = 10,
-        switch_icon = function(self, selected)
+        switch_icon = function(self, selected, full)
+            full = full or false
             if selected then
                 self.icon = beautiful.tag_logo_circle
+            elseif not selected and full then
+                self.icon = beautiful.tag_logo_circle_unfocused
             else
                 self.icon = beautiful.tag_logo_circle_outline
             end

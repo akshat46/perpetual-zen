@@ -13,6 +13,9 @@ local term
 local options = {}
 local client
 
+collectgarbage("setpause", 100)
+collectgarbage("setstepmul", 400)
+
 quawke.init = function(terminal, o, fallback)
     fallback = fallback or false
     o = o or {}
@@ -37,6 +40,7 @@ quawke.init = function(terminal, o, fallback)
         client = c
         c.hidden = not fallback
     end)
+    collectgarbage()
 end
 
 quawke.toggle = function(c)
@@ -49,6 +53,7 @@ quawke.toggle = function(c)
         end) then
         quawke.init(term, options, true)
     end
+    collectgarbage()
 end
 
 quawke.getClient = function() return client end

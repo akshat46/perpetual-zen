@@ -2,13 +2,16 @@ local awful = require("awful")
 local wibox = require("wibox")
 local watch = require("awful.widget.watch")
 local beautiful = require("beautiful")
+local gears = require("gears")
 local notify = require("naughty").notify
 
 local GET_BAT_CAP = 'bash -c "cat /sys/class/power_supply/BAT0/capacity"'
 local GET_BAT_CHR = 'bash -c "cat /sys/class/power_supply/ADP1/online"'
 local charging = false
 
-local battery_widget = wibox.widget({
+local battery_widget = {}
+
+battery_widget.widget = wibox.widget({
     {
         id = "icon_widget",
         {
@@ -42,39 +45,65 @@ local battery_widget = wibox.widget({
     force_height = 20,
 })
 
-local update_graphic = function(widget,stdout, _, _, _)
-  local cap = tonumber(stdout)
-  local battery_icon
-  if not charging then
-    if cap < 25 then
-        battery_icon = beautiful.battery_icon_low
-        notify({
-          title = "Low Battery",
-          text = "bro charge your shit",
-          icon = beautiful.battery_icon_low,
-          icon_size = beautiful.notification_size_small.height-10,
-          width = beautiful.notification_size_small.width,
-          height = beautiful.notification_size_small.height,
-        })
-    elseif (cap < 60) then battery_icon=beautiful.battery_icon_med
-    elseif (cap < 80) then battery_icon=beautiful.battery_icon_high
-    elseif (cap <= 100) then battery_icon=beautiful.battery_icon_full
-    end
-    widget.icon_widget.image = battery_icon
-  end
-  widget.text_widget.text = cap .. "%"
+local update = function()
+    awful.spawn.easy_async_with_shell(command, function()
+      awful.spawn.easy_async_with_shell(GET_BAT_CHR, function(out)
+        if tonumber(out) == 1 then
+          battery_widget.widget.icon_widget.image = beautiful.battery_icon_charging
+          charging = true
+        else
+          charging = false
+        end
+      end)
+    end)
+    awful.spawn.easy_async_with_shell(command, function()
+      awful.spawn.easy_async_with_shell(GET_BAT_CAP, function(out)
+        local cap = tonumber(out)
+        local battery_icon
+        if not charging then
+          if cap < 25 then
+              battery_icon = beautiful.battery_icon_low
+              notify({
+                title = "Low Battery",
+                text = "bro charge your shit",
+                icon = beautiful.battery_icon_low,
+                icon_size = beautiful.notification_size_small.height-10,
+                width = beautiful.notification_size_small.width,
+                height = beautiful.notification_size_small.height,
+              })
+          elseif (cap < 60) then battery_icon=beautiful.battery_icon_med
+          elseif (cap < 80) then battery_icon=beautiful.battery_icon_high
+          elseif (cap <= 100) then battery_icon=beautiful.battery_icon_full
+          end
+          battery_widget.widget.icon_widget.image = battery_icon
+        end
+        battery_widget.widget.text_widget.text = cap .. "%"
+      end)
+    end)
+    collectgarbage()
 end
 
-local update_charging = function(widget, stdout, _, _, _)
-  if tonumber(stdout) == 1 then
-    widget.icon_widget.image = beautiful.battery_icon_charging
-    charging = true
+local widget_update = gears.timer{
+  timeout = 10,
+  call_now = false,
+  callback = function()
+    update()
+  end
+}
+
+update()
+widget_update:start()
+
+collectgarbage("setpause", 100)
+collectgarbage("setstepmul", 400)
+
+battery_widget.toggle_checker = function(visible)
+  if not visible then
+    widget_update:stop()
   else
-    charging = false
+    update()
+    widget_update:start()
   end
 end
-
-watch(GET_BAT_CAP, 5, update_graphic, battery_widget)
-watch(GET_BAT_CHR, 2, update_charging, battery_widget)
 
 return battery_widget
