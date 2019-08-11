@@ -1,11 +1,20 @@
-![Logo](https://i.imgur.com/HxtHvt9.png)
----
-*A theme for awesome-wm.*
+<p align="center">
+  <img src="https://i.imgur.com/HxtHvt9.png"/>
+</p>
 
-![screenshot](https://i.imgur.com/A5u9HDN.png)
+---
+
+An awesome-wm theme with different toggleable components.
+
+<p align="center">
+  <img src="https://i.imgur.com/A5u9HDN.png"/>
+</p>
 
 ## Key Binds
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/akshat46/perpetual-zen/master/screenshots/keybinds.png">
+</p>
 
 ## Usage
 Backup your configurations and clone this repository in your awesomewm config folder (~/.config/awesome/). 
