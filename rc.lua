@@ -363,7 +363,7 @@ globalkeys = gears.table.join(
 
     -- JGmenu
     awful.key({ modkey }, "d", function() awful.spawn("jgmenu_run") end,
-              {description = "show the menubar", group = "launcher"}),
+              {description = "display menu", group = "launcher"}),
 
     --flameshot
     awful.key({ modkey, "Shift" }, "d", function() awful.spawn("flameshot gui") end,
