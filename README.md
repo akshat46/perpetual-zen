@@ -31,7 +31,7 @@ tags banner (left bottom) and info banner (right bottom)
 `widgets/` 
 info banner components as independent widgets and rest of the banners. 
 
-*`exit_screen.lua` is taken from [elanapan's dotfiles](https://github.com/elenapan/dotfiles/blob/master/config/awesome/noodle/exit_screen.lua)* 
+*`exit_screen.lua` is an unused file taken from [elanapan's dotfiles](https://github.com/elenapan/dotfiles/blob/master/config/awesome/noodle/exit_screen.lua). I am trying to keep awesome as light as possible and this file adds about 25mb of memory usage. Keeping it around for referencing when I work on`exit.lua`* 
 
 `spawtify/`
 spawtify repo as a module. See the module's readme for more details.
