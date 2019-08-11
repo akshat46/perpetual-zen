@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://i.imgur.com/HxtHvt9.png"/>
+  <img src="https://github.com/akshat46/perpetual-zen/blob/master/title.png?raw=true"/>
 </p>
 
 ---
