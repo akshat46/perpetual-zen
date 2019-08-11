@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/akshat46/perpetual-zen/blob/master/title.png?raw=true"/>
+  <img src="https://github.com/akshat46/perpetual-zen/blob/master/screenshots/title.png?raw=true"/>
 </p>
 
 ---
@@ -7,7 +7,7 @@
 An awesome-wm theme with different toggleable components.
 
 <p align="center">
-  <img src="https://i.imgur.com/A5u9HDN.png"/>
+  <img src="https://github.com/akshat46/perpetual-zen/blob/master/screenshots/screenshot_pz.png?raw=true"/>
 </p>
 
 ## Key Binds
