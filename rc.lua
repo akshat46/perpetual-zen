@@ -16,7 +16,7 @@ local banners = require("banners")
 local spotify = require("spawtify/spotify_widget")
 local quawke = require("widgets/quawke")
 local top = require("widgets/top")
--- local exit_screen = require("widgets.exit_screen")
+-- local exit = require("widgets/exit")
 local layout_popup = require("layout_popup")
 local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
@@ -242,6 +242,7 @@ awful.screen.connect_for_each_screen(function(s)
     -- Custom banners
     banners.init_tags_banner(s)
     banners.init_info_banner(s)
+    -- exit.init_exit_banner(s)
 
     spotify.widget({
         screen = s,
@@ -367,7 +368,8 @@ globalkeys = gears.table.join(
     --flameshot
     awful.key({ modkey, "Shift" }, "d", function() awful.spawn("flameshot gui") end,
         {description = "flameshot: initialize", group = "launcher"}),
-
+    awful.key({ modkey, "Control" }, "d", function() awful.spawn("flameshot screen -c") end,
+        {description = "flameshot: screen to clipboard", group = "launcher"}),
     --Emacs
     awful.key({ modkey, }, "e", function() awful.spawn("emacs") end,
         {description = "Emacs", group = "launcher"}),

@@ -55,10 +55,11 @@ local update = function()
         elseif (level <= 100) then wifi_icon=beautiful.wifi_icon_high
         end
         wifi_widget.widget.icon_widget.image = wifi_icon
+        wifi_widget.widget.text_widget.text = level .. "%"
       else
         wifi_widget.widget.icon_widget.image = beautiful.wifi_icon_disconnected
+        wifi_widget.widget.text_widget.text = ""
       end
-      wifi_widget.widget.text_widget.text = level .. "%"
       collectgarbage()
     end)
   end)

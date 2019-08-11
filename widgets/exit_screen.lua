@@ -273,3 +273,5 @@ exit_screen:setup {
   },
   layout = wibox.layout.stack,
 }
+
+collectgarbage()
