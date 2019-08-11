@@ -31,6 +31,8 @@ tags banner (left bottom) and info banner (right bottom)
 `widgets/` 
 info banner components as independent widgets and rest of the banners. 
 
+*`exit_screen.lua` is taken from [elanapan's dotfiles](https://github.com/elenapan/dotfiles/blob/master/config/awesome/noodle/exit_screen.lua)* 
+
 `spawtify/`
 spawtify repo as a module. See the module's readme for more details.
 
@@ -39,4 +41,6 @@ Consists of all the startup programs.
 
 `utils.lua` 
 Helper functions
+
+*a modified version of [lawsdontapplytopigs's utils.lua](https://github.com/lawsdontapplytopigs/dotfiles/blob/master/awesome/utils.lua)*
 
