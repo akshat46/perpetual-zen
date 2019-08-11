@@ -1,10 +1,7 @@
 <p align="center">
   <img src="https://github.com/akshat46/perpetual-zen/blob/master/screenshots/title.png?raw=true"/>
+  An awesome-wm theme with different toggleable components.
 </p>
-
----
-
-An awesome-wm theme with different toggleable components.
 
 <p align="center">
   <img src="https://github.com/akshat46/perpetual-zen/blob/master/screenshots/screenshot_pz.png?raw=true"/>
