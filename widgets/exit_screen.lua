@@ -237,7 +237,7 @@ local background = wibox.widget({
   visible = true,
   resize= true,
   widget = wibox.widget.imagebox,
-  image = "/home/akshat/Pictures/Wallpapers/blurred-exit-screen.jpg",
+  image = custom_themes_path.."wallpapers/blurred-exit-screen.jpg",
 })
 background.point = awful.placement.centered
 
