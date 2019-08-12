@@ -50,13 +50,13 @@ local update = function()
       awful.spawn.easy_async_with_shell(GET_TEMP_CMD, function(out)
           local temp = tonumber(out)
           if temp then
-          temp = temp/1000
-          thermal_widget.widget.text_widget.text = math.floor(temp).."°C"
-          if init then
-            thermal_widget.widget.icon_widget.image = beautiful.thermal_icon
-            init = false
+            temp = temp/1000
+            thermal_widget.widget.text_widget.text = math.floor(temp).."°C"
+            if init then
+              thermal_widget.widget.icon_widget.image = beautiful.thermal_icon
+              init = false
+            end
           end
-        end
       end)
     end)
     collectgarbage()
