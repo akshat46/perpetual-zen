@@ -19,9 +19,11 @@ collectgarbage("setstepmul", 400)
 --- tags banner
 banners.init_tags_banner = function(s)
     s.tagsBanner = awful.widget.taglist(s, awful.widget.taglist.filter.all)
-    screen[1]:connect_signal("tag::history::update", function()
-        handle_tag_icons(awful.tag.selected(1))
-    end)
+    for s in screen do
+        s:connect_signal("tag::history::update", function()
+            handle_tag_icons(awful.tag.selected(1))
+        end)
+    end
     s.tagsBannerContainer = wibox{
         screen = s,
         x = -20,
