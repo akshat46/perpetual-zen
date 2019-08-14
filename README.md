@@ -7,6 +7,8 @@
   <img src="https://github.com/akshat46/perpetual-zen/blob/master/screenshots/screenshot_pz.png?raw=true"/>
 </p>
 
+**Requires awesome v4.3 or above.** 
+
 ## Key Binds
 
 <p align="center">
