@@ -18,19 +18,28 @@ collectgarbage("setstepmul", 400)
 
 --- tags banner
 banners.init_tags_banner = function(s)
-    s.tagsBanner = awful.widget.taglist(s, awful.widget.taglist.filter.all)
+    s.tagsBanner = awful.widget.taglist{
+        screen = s,
+        filter = awful.widget.taglist.filter.all,
+        style = {
+            bg_focus = beautiful.banner_bg or beautiful.bg_focus,
+        },
+    }
     screen[1]:connect_signal("tag::history::update", function()
         handle_tag_icons(awful.tag.selected(1))
-    end)
+                            end)
+
     s.tagsBannerContainer = wibox{
         screen = s,
         x = -20,
         visible = true,
         width = dpi(360), --460
         height = dpi(70), --80
-        bg = beautiful.bg_normal,
+        bg = beautiful.banner_bg or beautiful.bg_normal,
         shape = utils.rrect(beautiful.border_radius),
         ontop = true,
+        border_width = beautiful.banner_border_width,
+        border_color = beautiful.banner_border_color,
     }
     s.tagsBannerContainer:setup{
         halign = "right",
@@ -60,9 +69,11 @@ banners.init_info_banner = function(s)
         visible = true,
         width = dpi(360),
         height = dpi(230),
-        bg = beautiful.bg_normal,
+        bg =  beautiful.banner_bg or beautiful.bg_normal,
         shape = utils.rrect(beautiful.border_radius),
         ontop = true,
+        border_width = beautiful.banner_border_width,
+        border_color = beautiful.banner_border_color,
     }
     s.layoutBox = awful.widget.layoutbox(s)
     --s.layoutBox.point = awful.placement.top_left

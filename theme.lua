@@ -18,9 +18,15 @@ theme.fontname      = "Atlas Grotesk"
 theme.titlefont     = "Atlas Grotesk Web Bold"
 theme.padding_font  = "hack 2"
 
+theme.cl_green = xrdb.color2
+theme.cl_blue = xrdb.color4
+theme.cl_red = xrdb.color1
+theme.cl_yellow = xrdb.color3
+theme.cl_violet = xrdb.color5
+
 theme.bg_normal     = xrdb.background
-theme.bg_focus      = xrdb.color10
-theme.bg_urgent     = xrdb.color9
+theme.bg_focus      = theme.cl_blue
+theme.bg_urgent     = theme.red
 theme.bg_minimize   = "#444444"
 theme.bg_systray    = theme.bg_normal
 
@@ -29,25 +35,27 @@ theme.fg_focus      = xrdb.color13
 theme.fg_urgent     = xrdb.color9
 theme.fg_minimize   = "#ffffff"
 
-theme.useless_gap   = dpi(0)
-theme.border_width  = dpi(0)
+theme.useless_gap   = 0
+theme.border_width  = 0
 theme.rounded_corners = true
-theme.border_radius = 8
-theme.border_normal = "#000000"
-theme.border_focus  = "#535d6c"
-theme.border_marked = "#91231c"
+theme.border_radius = 5
+theme.border_normal = "#310a6f"
+theme.banner_border_width = 3
+theme.banner_border_color = theme.cl_blue
+theme.banner_bg = xrdb.background
 
 -- naughty
 theme.notification_font = theme.font
 theme.notification_bg = theme.bg_normal
 theme.notification_fg = theme.fg_normal
-theme.notification_border_color = theme.bg_normal
-theme.notification_border_width = 0
+theme.notification_border_color = theme.cl_blue
+theme.notification_border_width = 3
 theme.notification_shape = utils.rrect(theme.border_radius)
 theme.notification_size_small = { height = 100, width  = 340 }
 theme.notification_size_medium = { height = 120, width  = 400 }
 theme.notification_size_large = { height = 135, width  = 450 }
-
+theme.notification_margin = dpi(20)
+theme.layoutlist_bg_selected = theme.cl_red
 -- There are other variable sets
 -- overriding the default one when
 -- defined, the sets are:

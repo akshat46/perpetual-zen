@@ -26,7 +26,7 @@ local function add_tags()
         end,
     })
     awful.tag.add("2", {
-        layout      = awful.layout.suit.tile,
+        layout      = awful.layout.suit.floating,
         screen      = s,
         resize = true_outline,
         icon = beautiful.tag_logo_firefox_outline,
@@ -45,7 +45,7 @@ local function add_tags()
         end,
     })
     awful.tag.add("3", {
-        layout      = awful.layout.suit.tile,
+        layout      = awful.layout.suit.floating,
         screen      = s,
         icon = beautiful.tag_logo_code_outline,
         master_fill_policy = "master_width_factor",
@@ -63,7 +63,7 @@ local function add_tags()
         end
     })
     awful.tag.add("4", {
-        layout      = awful.layout.suit.tile,
+        layout      = awful.layout.suit.floating,
         screen      = s,
         icon = beautiful.tag_logo_folder_outline,
         master_fill_policy = "master_width_factor",

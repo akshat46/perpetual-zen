@@ -15,7 +15,9 @@ local utils = require("utils")
 local banners = require("banners")
 local spotify = require("spawtify/spotify_widget")
 local quawke = require("widgets/quawke")
+local xrandr = require("xrandr")
 local top = require("widgets/top")
+local cairo = require("lgi").cairo
 -- local exit = require("widgets/exit")
 local layout_popup = require("layout_popup")
 local xresources = require("beautiful.xresources")
@@ -36,6 +38,8 @@ if awesome.startup_errors then
                      text = awesome.startup_errors })
 end
 
+
+beautiful.notification_border_width = 3
 --temporary spotify notification fix (TODO)
 -- Changing spotify notifications.
 naughty.config.presets.spotify = {
@@ -45,12 +49,14 @@ naughty.config.presets.spotify = {
     end,
 
     -- Adjust the size of the notification
-    height = 100,
-    width  = 340,
+    height = 120,
+    width  = 400,
     -- Guessing the value, find a way to fit it to the proper size later
-    icon_size = 90
+    icon_size = 120,
+    border_width = beautiful.notification_border_width,
 }
 table.insert(naughty.dbus.config.mapping, {{appname = "Spotify"}, naughty.config.presets.spotify})
+naughty.config.defaults.margin = beautiful.notification_margin
 
 -- Handle runtime errors after startup
 do
@@ -71,7 +77,7 @@ end
 -- autostart programs
 local startup_programs = require("startup")
 for _, v in pairs(startup_programs) do
-    awful.util.spawn(v)
+    awful.spawn.once(v)
 end
 
 -- {{{ Variable definitions
@@ -79,7 +85,7 @@ end
 beautiful.init(os.getenv("HOME") .. "/.config/awesome/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "urxvt"
+terminal = "kitty"
 editor = os.getenv("EDITOR") or "editor"
 editor_cmd = terminal .. " -e " .. editor
 quawke.init(terminal, terminal)
@@ -113,15 +119,73 @@ awful.layout.layouts = {
 -- }}}
 
 -- rounded corners
+-- if beautiful.rounded_corners then
+--   client.connect_signal("property::geometry", function (c)
+--     if not c.fullscreen then
+--         gears.timer.delayed_call(function()
+--             -- c.shape_clip = gears.shape.rounded_rect(beautiful.border_radius)
+--             gears.surface.apply_shape_bounding(c, gears.shape.rounded_rect, beautiful.border_radius)
+--         end)
+--     end
+--   end)
+-- end
+
+local function apply_shape(draw, shape, ...)
+  local geo = draw:geometry()
+  local shape_args = ...
+
+  local img = cairo.ImageSurface(cairo.Format.A1, geo.width, geo.height)
+  local cr = cairo.Context(img)
+
+  cr:set_operator(cairo.Operator.CLEAR)
+  cr:set_source_rgba(0,0,0,1)
+  cr:paint()
+  cr:set_operator(cairo.Operator.SOURCE)
+  cr:set_source_rgba(1,1,1,1)
+
+  shape(cr, geo.width, geo.height, shape_args)
+
+  cr:fill()
+
+  draw.shape_bounding = img._native
+
+  cr:set_operator(cairo.Operator.CLEAR)
+  cr:set_source_rgba(0,0,0,1)
+  cr:paint()
+  cr:set_operator(cairo.Operator.SOURCE)
+  cr:set_source_rgba(1,1,1,1)
+
+  local border = beautiful.border_width
+  --local titlebar_height = titlebar.is_enabled(draw) and beautiful.titlebar_height or border
+  local titlebar_height = border
+  gears.shape.transform(shape):translate(
+    border, titlebar_height
+  )(
+    cr,
+    geo.width-border*2,
+    geo.height-titlebar_height-border,
+    --shape_args
+    8
+  )
+
+  cr:fill()
+
+  draw.shape_clip = img._native
+
+  img:finish()
+end
+
 if beautiful.rounded_corners then
+  client.connect_signal("focus", function(c) c.border_color = beautiful.cl_blue end)
+  client.connect_signal("unfocus", function(c) c.border_color = beautiful.cl_violet end)
   client.connect_signal("property::geometry", function (c)
-    if not c.fullscreen then
-        gears.timer.delayed_call(function()
-          gears.surface.apply_shape_bounding(c, gears.shape.rounded_rect, 10)
-        end)
-    end
+                          if not c.fullscreen then
+                            gears.timer.delayed_call(apply_shape, c, gears.shape.rounded_rect, 10)
+                          end
   end)
 end
+
+beautiful.layoutlist_shape = utils.rrect(beautiful.border_radius)
 
 local ll = awful.widget.layoutlist {
     source      = awful.widget.layoutlist.source.default_layouts, --DOC_HIDE
@@ -145,7 +209,6 @@ local ll = awful.widget.layoutlist {
         id              = 'background_role',
         forced_width    = dpi(68),
         forced_height   = dpi(68),
-        shape           = gears.shape.rounded_rect,
         widget          = wibox.container.background,
     },
 }
@@ -156,8 +219,8 @@ local layout_popup = awful.popup {
         margins = dpi(24),
         widget  = wibox.container.margin,
     },
-    border_color = beautiful.border_color,
-    border_width = beautiful.border_width,
+    border_color = beautiful.cl_yellow,
+    border_width = beautiful.banner_border_width,
     placement    = awful.placement.centered,
     shape = utils.rrect(beautiful.border_radius),
     ontop        = true,
@@ -246,7 +309,7 @@ awful.screen.connect_for_each_screen(function(s)
 
     spotify.widget({
         screen = s,
-        artwork = true,
+        artwork = false,
     })
     spotify.toggle()
 end)
@@ -309,6 +372,8 @@ globalkeys = gears.table.join(
               {description = "incremenet tag gap by 5", group = "client"}),
     awful.key({ modkey, "Shift"   }, "-", function ()  awful.screen.focused().selected_tag.useless_gap = awful.screen.focused().selected_tag.useless_gap - 5    end,
               {description = "decrement tag gap by 5", group = "client"}),
+    awful.key({ modkey, "Control"   }, "s", function () xrandr.xrandr() end,
+              {description = "multiple screens", group = "client"}),
 
     -- Standard program
     awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
@@ -373,6 +438,9 @@ globalkeys = gears.table.join(
     --Emacs
     awful.key({ modkey, }, "e", function() awful.spawn("emacs") end,
         {description = "Emacs", group = "launcher"}),
+    --XPad
+    awful.key({ modkey, "Shift"}, "n", function() awful.spawn("xpad -t") end,
+        {description = "XPad", group = "launcher"}),
 
     --Firefox
     awful.key({ modkey, "Shift" }, "f", function() awful.spawn("firefox") end,
@@ -559,6 +627,8 @@ awful.rules.rules = {
       properties = { screen = 1, tag = "4" } },
     { rule = { class = "Spotify" },
       properties = { screen = 1, tag = "5" } },
+    { rule = { class = "xpad" },
+    properties = { floating = true } },
     { rule = { class = "GLava" },
       callback = function(c) spotify.setVisualizer(c) end
       },
@@ -598,38 +668,19 @@ client.connect_signal("request::titlebars", function(c)
 
     awful.titlebar(c) : setup {
         { -- Left
-            awful.titlebar.widget.iconwidget(c),
             buttons = buttons,
             layout  = wibox.layout.fixed.horizontal
         },
         { -- Middle
-            { -- Title
-                align  = "center",
-                widget = awful.titlebar.widget.titlewidget(c)
-            },
             buttons = buttons,
             layout  = wibox.layout.flex.horizontal
         },
         { -- Right
             awful.titlebar.widget.floatingbutton (c),
-            awful.titlebar.widget.maximizedbutton(c),
-            awful.titlebar.widget.stickybutton   (c),
-            awful.titlebar.widget.ontopbutton    (c),
             awful.titlebar.widget.closebutton    (c),
             layout = wibox.layout.fixed.horizontal()
         },
         layout = wibox.layout.align.horizontal
     }
 end)
-
--- Enable sloppy focus, so that focus follows mouse.
--- client.connect_signal("mouse::enter", function(c)
---     if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
---         and awful.client.focus.filter(c) then
---         client.focus = c
---     end
--- end)
-
-client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
-client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
